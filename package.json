@@ -2,7 +2,8 @@
 	"name": "timeout",
 	"displayName": "Timeout",
 	"description": "",
-	"version": "0.0.1",
+	"version": "0.0.2",
+	"repository": "https://bitbucket.org/SamBueth/timeout",
 	"engines": {
 		"vscode": "^1.30.0"
 	},
@@ -57,6 +58,7 @@
 		"@types/mocha": "^2.2.42"
 	},
 	"dependencies": {
-		"typescript-dotnet-umd": "^4.11.2"
+		"typescript-dotnet-umd": "^4.11.2",
+		"version": "^0.1.2"
 	}
 }
