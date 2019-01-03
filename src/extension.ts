@@ -8,41 +8,59 @@ let myStatusBarItem: vscode.StatusBarItem;
 let interval: NodeJS.Timer;
 
 let start = new ClockTime(0);
+let ende = new TimeSpan(0);
+
+let settings = vscode.workspace.getConfiguration("timeout");
 
 function arbeitszeit(): TimeSpan {
-	return TimeSpan.fromHours(7.6 + 0.5);
-}
-
-function ende(): TimeSpan {
-	return arbeitszeit().add(start);
+	return TimeSpan.fromHours(settings.worktime + settings.breaktime);
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	updateSettings();
 
-	let disset = vscode.commands.registerCommand('timeout.set', () => {
-		if (interval !== null) stopInterval();
+	let disstart = vscode.commands.registerCommand('timeout.start', () => {
+		stopInterval();
+		vscode.window.showInputBox({ prompt: "Geben sie die Startzeit ein. ", placeHolder: new Date().toLocaleTimeString() }).then((value) => {
+			if (value === '') start = DateTime.now.timeOfDay;
+			else start = new DateTime(new Date().toDateString() + ' ' + value).timeOfDay;
+			ende = arbeitszeit().add(start);
 
-		vscode.window.showInputBox({}).then((value) => {
-			if (value !== '') {
-				start = new DateTime(new Date().toDateString() + ' ' + value).timeOfDay;
-				myStatusBarItem.tooltip = TimeSpanToString(start) + " - " + TimeSpanToString(ende());
-				interval = setInterval(updateStatusBarItem, 1000);
-				myStatusBarItem.show();
-			}
-			else stopInterval();
+			myStatusBarItem.tooltip = TimeSpanToString(start) + " - " + TimeSpanToString(ende);
+			interval = setInterval(updateStatusBarItem, 1000);
+			updateStatusBarItem();
+			myStatusBarItem.show();
 		});
 	});
 
-	let disclear = vscode.commands.registerCommand('timeout.clear', () => {
-		if (interval !== null) stopInterval();
+	let disset = vscode.commands.registerCommand('timeout.set', () => {
+		stopInterval();
+		vscode.window.showInputBox({ prompt: "Geben Sie die Endzeit ein. " }).then((value) => {
+			if (value !== '') {
+				start = DateTime.now.timeOfDay;
+				ende = new TimeSpan(0).add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
+				myStatusBarItem.tooltip = TimeSpanToString(start) + " - " + TimeSpanToString(ende);
+				interval = setInterval(updateStatusBarItem, 1000);
+				updateStatusBarItem();
+				myStatusBarItem.show();
+			}
+			else {
+				vscode.window.showWarningMessage("Bitte geben Sie eine Endzeit ein! ");
+			}
+		});
 	});
 
+	let disstop = vscode.commands.registerCommand('timeout.stop', () => {
+		stopInterval();
+	});
+
+	context.subscriptions.push(disstart);
 	context.subscriptions.push(disset);
-	context.subscriptions.push(disclear);
+	context.subscriptions.push(disstop);
 
 
 	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	myStatusBarItem.command = 'timeout.set';
+	myStatusBarItem.command = 'timeout.stop';
 
 	context.subscriptions.push(myStatusBarItem);
 }
@@ -50,10 +68,13 @@ export function activate(context: vscode.ExtensionContext) {
 // this method is called when your extension is deactivated
 export function deactivate() { }
 
+function updateSettings() {
+	settings = vscode.workspace.getConfiguration("timeout");
+}
 
 function updateStatusBarItem(): void {
 	let now = DateTime.now.timeOfDay;
-	var t = new TimeSpan(ende().getTotalMilliseconds() - now.getTotalMilliseconds());
+	var t = new TimeSpan(ende.getTotalMilliseconds() - now.getTotalMilliseconds());
 	switch (t.direction) {
 		case +1:
 			myStatusBarItem.text = "T-" + TimeSpanToString(t);
@@ -67,7 +88,7 @@ function updateStatusBarItem(): void {
 }
 
 function stopInterval() {
-	clearInterval(interval);
+	if (interval !== undefined) clearInterval(interval);
 	myStatusBarItem.hide();
 }
 

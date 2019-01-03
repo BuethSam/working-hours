@@ -6,6 +6,7 @@
 	"engines": {
 		"vscode": "^1.30.0"
 	},
+	"publisher": "sBueth",
 	"categories": [
 		"Other"
 	],
@@ -14,12 +15,32 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
+		"commands": [{
+				"command": "timeout.start",
+				"title": "Start Timeout"
+			},
 			{
 				"command": "timeout.set",
 				"title": "Set Timeout"
+			},
+			{
+				"command": "timeout.stop",
+				"title": "Stop Timeout"
 			}
-		]
+		],
+		"configuration": [{
+			"title": "Worktimeout",
+			"properties": {
+				"timeout.worktime": {
+					"type": "number",
+					"default": 7.6
+				},
+				"timeout.breaktime": {
+					"type": "number",
+					"default": 0.5
+				}
+			}
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
