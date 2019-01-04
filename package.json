@@ -16,35 +16,40 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
+		"commands": [{
 				"command": "timeout.start",
-				"title": "Start Timeout"
+				"title": "Timeout starten"
 			},
 			{
 				"command": "timeout.set",
-				"title": "Set Timeout"
+				"title": "Timeout setzen"
+			},
+			{
+				"command": "timeout.startlast",
+				"title": "Timeout fortsetzten"
 			},
 			{
 				"command": "timeout.stop",
-				"title": "Stop Timeout"
+				"title": "Timeout stoppen"
 			}
 		],
-		"configuration": [
-			{
-				"title": "Worktimeout",
-				"properties": {
-					"timeout.worktime": {
-						"type": "number",
-						"default": 7.6
-					},
-					"timeout.breaktime": {
-						"type": "number",
-						"default": 0.5
-					}
+		"configuration": [{
+			"title": "Worktimeout",
+			"properties": {
+				"timeout.autostart": {
+					"type": "boolean",
+					"default": true
+				},
+				"timeout.worktime": {
+					"type": "number",
+					"default": 7.6
+				},
+				"timeout.breaktime": {
+					"type": "number",
+					"default": 0.5
 				}
 			}
-		]
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

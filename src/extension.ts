@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	if (tende) ende = new TimeSpan(tende.milliseconds, TimeUnit.Milliseconds);
 
-	if (ende.ticks !== 0) {
+	if (settings.autostart && ende.ticks !== 0) {
 		startTimeout();
 	}
 
@@ -60,12 +60,19 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
+	let disstartlast = vscode.commands.registerCommand('timeout.startlast', () => {
+		if (ende.ticks !== 0) {
+			startTimeout();
+		}
+	});
+
 	let disstop = vscode.commands.registerCommand('timeout.stop', () => {
 		stopInterval();
 	});
 
 
 	context.subscriptions.push(disstart);
+	context.subscriptions.push(disstartlast);
 	context.subscriptions.push(disset);
 	context.subscriptions.push(disstop);
 
