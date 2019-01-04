@@ -2,7 +2,7 @@
 	"name": "timeout",
 	"displayName": "Timeout",
 	"description": "",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"repository": "https://bitbucket.org/SamBueth/timeout",
 	"engines": {
 		"vscode": "^1.30.0"
