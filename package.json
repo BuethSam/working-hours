@@ -2,7 +2,7 @@
 	"name": "timeout",
 	"displayName": "Timeout",
 	"description": "",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"repository": "https://bitbucket.org/SamBueth/timeout",
 	"engines": {
 		"vscode": "^1.30.0"
@@ -16,7 +16,8 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
+		"commands": [
+			{
 				"command": "timeout.start",
 				"title": "Start Timeout"
 			},
@@ -29,19 +30,21 @@
 				"title": "Stop Timeout"
 			}
 		],
-		"configuration": [{
-			"title": "Worktimeout",
-			"properties": {
-				"timeout.worktime": {
-					"type": "number",
-					"default": 7.6
-				},
-				"timeout.breaktime": {
-					"type": "number",
-					"default": 0.5
+		"configuration": [
+			{
+				"title": "Worktimeout",
+				"properties": {
+					"timeout.worktime": {
+						"type": "number",
+						"default": 7.6
+					},
+					"timeout.breaktime": {
+						"type": "number",
+						"default": 0.5
+					}
 				}
 			}
-		}]
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

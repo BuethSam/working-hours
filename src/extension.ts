@@ -6,9 +6,13 @@ import TimeUnit from 'typescript-dotnet-umd/System/Time/TimeUnit';
 
 let myStatusBarItem: vscode.StatusBarItem;
 let interval: NodeJS.Timer;
+let gcontext: vscode.ExtensionContext;
 
-let start = new ClockTime(0);
-let ende = new TimeSpan(0);
+let ende: TimeSpan = new TimeSpan(0);
+
+function start(): TimeSpan {
+	return ende.add(new TimeSpan(arbeitszeit().milliseconds * -1, TimeUnit.Milliseconds));
+}
 
 let settings = vscode.workspace.getConfiguration("timeout");
 
@@ -17,19 +21,29 @@ function arbeitszeit(): TimeSpan {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+	gcontext = context;
 	updateSettings();
+	ende = new TimeSpan(0);
+
+	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+	myStatusBarItem.command = 'timeout.stop';
+
+	context.subscriptions.push(myStatusBarItem);
+
+	let tende: TimeSpan | undefined = context.globalState.get("ende");
+
+	if (tende) ende = new TimeSpan(tende.milliseconds, TimeUnit.Milliseconds);
+
+	if (ende.ticks !== 0) {
+		startTimeout();
+	}
 
 	let disstart = vscode.commands.registerCommand('timeout.start', () => {
 		stopInterval();
 		vscode.window.showInputBox({ prompt: "Geben sie die Startzeit ein. ", placeHolder: new Date().toLocaleTimeString() }).then((value) => {
-			if (value === '') start = DateTime.now.timeOfDay;
-			else start = new DateTime(new Date().toDateString() + ' ' + value).timeOfDay;
-			ende = arbeitszeit().add(start);
-
-			myStatusBarItem.tooltip = TimeSpanToString(start) + " - " + TimeSpanToString(ende);
-			interval = setInterval(updateStatusBarItem, 1000);
-			updateStatusBarItem();
-			myStatusBarItem.show();
+			if (value === '') ende = arbeitszeit().add(DateTime.now.timeOfDay);
+			else ende = arbeitszeit().add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
+			startTimeout();
 		});
 	});
 
@@ -37,12 +51,8 @@ export function activate(context: vscode.ExtensionContext) {
 		stopInterval();
 		vscode.window.showInputBox({ prompt: "Geben Sie die Endzeit ein. " }).then((value) => {
 			if (value !== '') {
-				start = DateTime.now.timeOfDay;
 				ende = new TimeSpan(0).add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
-				myStatusBarItem.tooltip = TimeSpanToString(start) + " - " + TimeSpanToString(ende);
-				interval = setInterval(updateStatusBarItem, 1000);
-				updateStatusBarItem();
-				myStatusBarItem.show();
+				startTimeout();
 			}
 			else {
 				vscode.window.showWarningMessage("Bitte geben Sie eine Endzeit ein! ");
@@ -54,19 +64,24 @@ export function activate(context: vscode.ExtensionContext) {
 		stopInterval();
 	});
 
+
 	context.subscriptions.push(disstart);
 	context.subscriptions.push(disset);
 	context.subscriptions.push(disstop);
 
-
-	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	myStatusBarItem.command = 'timeout.stop';
-
-	context.subscriptions.push(myStatusBarItem);
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() { }
+
+function startTimeout() {
+	gcontext.globalState.update("start", start);
+	gcontext.globalState.update("ende", ende);
+	myStatusBarItem.tooltip = TimeSpanToString(start()) + " - " + TimeSpanToString(ende);
+	interval = setInterval(updateStatusBarItem, 1000);
+	updateStatusBarItem();
+	myStatusBarItem.show();
+}
 
 function updateSettings() {
 	settings = vscode.workspace.getConfiguration("timeout");
