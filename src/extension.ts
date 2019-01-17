@@ -10,14 +10,15 @@ var Settings: SettingsClass;
 
 class SettingsClass {
 	private context: vscode.ExtensionContext;
-
+	private pende: TimeSpan | undefined;
 	constructor(_context: vscode.ExtensionContext) {
 		this.context = _context;
+		this.pende = this.context.globalState.get("ende");
 	}
 
 	public get ende(): TimeSpan | undefined {
-		if (!this.context.globalState.get("ende")) return undefined;
-		return new TimeSpan(this.context.globalState.get<TimeSpan>("ende")!.ticks, TimeUnit.Ticks);
+		if (!this.pende) return undefined;
+		return new TimeSpan(this.pende!.ticks, TimeUnit.Ticks);
 	}
 
 	public set ende(v: TimeSpan | undefined) {
@@ -56,12 +57,11 @@ class SettingsClass {
 
 }
 
-
 export function activate(context: vscode.ExtensionContext) {
 	Settings = new SettingsClass(context);
 
 	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	myStatusBarItem.command = 'timeout.stop';
+	myStatusBarItem.command = 'timeout.pause';
 
 	context.subscriptions.push(myStatusBarItem);
 
