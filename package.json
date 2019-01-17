@@ -2,7 +2,7 @@
 	"name": "timeout",
 	"displayName": "Timeout",
 	"description": "",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"repository": "https://bitbucket.org/SamBueth/timeout",
 	"engines": {
 		"vscode": "^1.30.0"
@@ -17,20 +17,24 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [{
-				"command": "timeout.start",
-				"title": "Timeout starten"
+				"command": "timeout.setstart",
+				"title": "Timeout Anfang setzen"
 			},
 			{
-				"command": "timeout.set",
-				"title": "Timeout setzen"
+				"command": "timeout.setend",
+				"title": "Timeout Ende setzen"
 			},
 			{
-				"command": "timeout.startlast",
+				"command": "timeout.resume",
 				"title": "Timeout fortsetzten"
 			},
 			{
-				"command": "timeout.stop",
-				"title": "Timeout stoppen"
+				"command": "timeout.pause",
+				"title": "Timeout pausieren"
+			},
+			{
+				"command": "timeout.clear",
+				"title": "Timeout stoppen und löschen"
 			}
 		],
 		"configuration": [{
@@ -40,11 +44,11 @@
 					"type": "boolean",
 					"default": true
 				},
-				"timeout.worktime": {
+				"timeout.workTime": {
 					"type": "number",
 					"default": 7.6
 				},
-				"timeout.breaktime": {
+				"timeout.breakTime": {
 					"type": "number",
 					"default": 0.5
 				}

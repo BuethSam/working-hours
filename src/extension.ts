@@ -5,53 +5,84 @@ import TimeSpan from 'typescript-dotnet-umd/System/Time/TimeSpan';
 import TimeUnit from 'typescript-dotnet-umd/System/Time/TimeUnit';
 
 let myStatusBarItem: vscode.StatusBarItem;
-let interval: NodeJS.Timer;
-let gcontext: vscode.ExtensionContext;
+var interval: NodeJS.Timer;
+var Settings: SettingsClass;
 
-let ende: TimeSpan = new TimeSpan(0);
+class SettingsClass {
+	private context: vscode.ExtensionContext;
 
-function start(): TimeSpan {
-	return ende.add(new TimeSpan(arbeitszeit().milliseconds * -1, TimeUnit.Milliseconds));
+	constructor(_context: vscode.ExtensionContext) {
+		this.context = _context;
+	}
+
+	public get ende(): TimeSpan | undefined {
+		if (!this.context.globalState.get("ende")) return undefined;
+		return new TimeSpan(this.context.globalState.get<TimeSpan>("ende")!.ticks, TimeUnit.Ticks);
+	}
+
+	public set ende(v: TimeSpan | undefined) {
+		this.context.globalState.update("ende", v);
+	}
+
+	public get start(): TimeSpan | undefined {
+		if (!this.ende) return undefined;
+		return this.ende.add(new TimeSpan(this.arbeitszeit.milliseconds * -1, TimeUnit.Milliseconds));
+	}
+
+	public get arbeitszeit(): TimeSpan {
+		return TimeSpan.fromHours(this.workTime + this.breakTime);
+	}
+
+	private get config(): vscode.WorkspaceConfiguration {
+		return vscode.workspace.getConfiguration("timeout");
+	}
+
+	public get autostart(): boolean {
+		return this.config.get<boolean>("autostart")!;
+	}
+
+	public get workTime(): number {
+		return this.config.get<number>("workTime")!;
+	}
+
+	public get breakTime(): number {
+		return this.config.get<number>("breakTime")!;
+	}
+
+	public get rest(): TimeSpan {
+		if (!Settings.ende) return TimeSpan.zero;
+		return new TimeSpan(Settings.ende.getTotalMilliseconds() - DateTime.now.timeOfDay.getTotalMilliseconds());
+	}
+
 }
 
-let settings = vscode.workspace.getConfiguration("timeout");
-
-function arbeitszeit(): TimeSpan {
-	return TimeSpan.fromHours(settings.worktime + settings.breaktime);
-}
 
 export function activate(context: vscode.ExtensionContext) {
-	gcontext = context;
-	updateSettings();
-	ende = new TimeSpan(0);
+	Settings = new SettingsClass(context);
 
 	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 	myStatusBarItem.command = 'timeout.stop';
 
 	context.subscriptions.push(myStatusBarItem);
 
-	let tende: TimeSpan | undefined = context.globalState.get("ende");
-
-	if (tende) ende = new TimeSpan(tende.milliseconds, TimeUnit.Milliseconds);
-
-	if (settings.autostart && ende.ticks !== 0) {
+	if (Settings.autostart && Settings.ende && Settings.rest.direction === +1) {
 		startTimeout();
 	}
 
-	let disstart = vscode.commands.registerCommand('timeout.start', () => {
+	let dissetstart = vscode.commands.registerCommand('timeout.setstart', () => {
 		stopInterval();
 		vscode.window.showInputBox({ prompt: "Geben sie die Startzeit ein. ", placeHolder: new Date().toLocaleTimeString() }).then((value) => {
-			if (value === '') ende = arbeitszeit().add(DateTime.now.timeOfDay);
-			else ende = arbeitszeit().add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
+			if (value === '') Settings.ende = Settings.arbeitszeit.add(DateTime.now.timeOfDay);
+			else Settings.ende = Settings.arbeitszeit.add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
 			startTimeout();
 		});
 	});
 
-	let disset = vscode.commands.registerCommand('timeout.set', () => {
+	let dissetend = vscode.commands.registerCommand('timeout.setend', () => {
 		stopInterval();
 		vscode.window.showInputBox({ prompt: "Geben Sie die Endzeit ein. " }).then((value) => {
 			if (value !== '') {
-				ende = new TimeSpan(0).add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
+				Settings.ende = new TimeSpan(0).add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
 				startTimeout();
 			}
 			else {
@@ -60,21 +91,30 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
-	let disstartlast = vscode.commands.registerCommand('timeout.startlast', () => {
-		if (ende.ticks !== 0) {
+	let disresume = vscode.commands.registerCommand('timeout.resume', () => {
+		if (Settings.ende) {
 			startTimeout();
 		}
+		else vscode.window.showWarningMessage("Timer nicht gesetzt! ");
 	});
 
-	let disstop = vscode.commands.registerCommand('timeout.stop', () => {
+	let dispause = vscode.commands.registerCommand('timeout.pause', () => {
 		stopInterval();
+		myStatusBarItem.hide();
+	});
+
+	let disclear = vscode.commands.registerCommand('timeout.clear', () => {
+		stopInterval();
+		myStatusBarItem.hide();
+		Settings.ende = undefined;
 	});
 
 
-	context.subscriptions.push(disstart);
-	context.subscriptions.push(disstartlast);
-	context.subscriptions.push(disset);
-	context.subscriptions.push(disstop);
+	context.subscriptions.push(dissetstart);
+	context.subscriptions.push(dissetend);
+	context.subscriptions.push(disresume);
+	context.subscriptions.push(dispause);
+	context.subscriptions.push(disclear);
 
 }
 
@@ -82,36 +122,30 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() { }
 
 function startTimeout() {
-	gcontext.globalState.update("start", start);
-	gcontext.globalState.update("ende", ende);
-	myStatusBarItem.tooltip = TimeSpanToString(start()) + " - " + TimeSpanToString(ende);
+	myStatusBarItem.tooltip = TimeSpanToString(Settings.start!) + " - " + TimeSpanToString(Settings.ende!);
 	interval = setInterval(updateStatusBarItem, 1000);
 	updateStatusBarItem();
 	myStatusBarItem.show();
 }
 
-function updateSettings() {
-	settings = vscode.workspace.getConfiguration("timeout");
-}
 
 function updateStatusBarItem(): void {
-	let now = DateTime.now.timeOfDay;
-	var t = new TimeSpan(ende.getTotalMilliseconds() - now.getTotalMilliseconds());
+	var t = Settings.rest;
+	if (t.ticks <= 0) stopInterval();
 	switch (t.direction) {
 		case +1:
-			myStatusBarItem.text = "T-" + TimeSpanToString(t);
+			myStatusBarItem.text = "$(watch) T-" + TimeSpanToString(t);
 			myStatusBarItem.color = 'statusBar.foreground';
 			break;
 		default:
-			myStatusBarItem.text = "ENDE";
-			myStatusBarItem.color = 'red';
+			myStatusBarItem.text = "$(check) ENDE";
+			myStatusBarItem.color = 'lime';
 			break;
 	}
 }
 
 function stopInterval() {
 	if (interval !== undefined) clearInterval(interval);
-	myStatusBarItem.hide();
 }
 
 function TimeSpanToString(t: TimeSpan | ClockTime): string {
