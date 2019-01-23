@@ -2,7 +2,7 @@
 	"name": "working-hours",
 	"displayName": "Working hours",
 	"description": "",
-	"version": "0.0.7",
+	"version": "1.0.0",
 	"repository": "https://bitbucket.org/SamBueth/working-hours",
 	"engines": {
 		"vscode": "^1.30.0"
