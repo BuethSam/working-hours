@@ -42,15 +42,18 @@
 			"properties": {
 				"working-hours.autostart": {
 					"type": "boolean",
-					"default": true
+					"default": true,
+					"description": "If enabled the countdown will resume when opening a new window"
 				},
 				"working-hours.workTime": {
 					"type": "number",
-					"default": 7.6
+					"default": 7.6,
+					"description": "Duration of your working hours in hours (e.g. 7.6), to add to the starttime to calculate the endtime"
 				},
 				"working-hours.breakTime": {
 					"type": "number",
-					"default": 30
+					"default": 30,
+					"description": "Duration of your break in minutes, to add to the starttime to calculate the endtime"
 				}
 			}
 		}]

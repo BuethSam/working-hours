@@ -13,8 +13,8 @@ Set the endtime of your day.
 This extension contributes the following settings:
 
 * `working-hours.autostart`: If enabled the countdown will resume when opening a new window.
-* `working-hours.workTime`: Duration of your working hours in hours (e.g. 7.6), to add to the starttime to calculate the endtime
-* `working-hours.breakTime`: Duration of your break in minutes, to add to the starttime to calculate the endtime
+* `working-hours.workTime`: Duration of your working hours in hours (e.g. 7.6), to add to the starttime to calculate the endtime.
+* `working-hours.breakTime`: Duration of your break in minutes, to add to the starttime to calculate the endtime.
 
 ## Known Issues
 
