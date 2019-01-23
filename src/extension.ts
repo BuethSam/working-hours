@@ -72,7 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let dissetstart = vscode.commands.registerCommand('working-hours.setstart', () => {
 		stopInterval();
-		vscode.window.showInputBox({ prompt: "Geben sie die Startzeit ein. ", placeHolder: new Date().toLocaleTimeString() }).then((value) => {
+		vscode.window.showInputBox({ prompt: "Please enter the starttime. ", placeHolder: new Date().toLocaleTimeString() }).then((value) => {
 			if (value === '') Settings.ende = Settings.arbeitszeit.add(DateTime.now.timeOfDay);
 			else Settings.ende = Settings.arbeitszeit.add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
 			startTimeout();
@@ -81,13 +81,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let dissetend = vscode.commands.registerCommand('working-hours.setend', () => {
 		stopInterval();
-		vscode.window.showInputBox({ prompt: "Geben Sie die Endzeit ein. " }).then((value) => {
+		vscode.window.showInputBox({ prompt: "Please enter the endtime. " }).then((value) => {
 			if (value !== '') {
 				Settings.ende = new TimeSpan(0).add(new DateTime(new Date().toDateString() + ' ' + value).timeOfDay);
 				startTimeout();
 			}
 			else {
-				vscode.window.showWarningMessage("Bitte geben Sie eine Endzeit ein! ");
+				// vscode.window.showWarningMessage("Bitte geben Sie eine Endzeit ein! ");
 			}
 		});
 	});
@@ -96,7 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (Settings.ende) {
 			startTimeout();
 		}
-		else vscode.window.showWarningMessage("Countdown nicht gesetzt! ");
+		else vscode.window.showWarningMessage("Countdown not set! ");
 	});
 
 	let dispause = vscode.commands.registerCommand('working-hours.pause', () => {

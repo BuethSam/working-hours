@@ -25,6 +25,10 @@ None.
 
 Users appreciate release notes as you update your extension.
 
+### 1.0.1
+
+Prompt text is now in english
+
 ### 1.0.0
 
 Initial release of Working Hours
