@@ -18,23 +18,23 @@
 	"contributes": {
 		"commands": [{
 				"command": "working-hours.setstart",
-				"title": "Countdown Anfang setzen"
+				"title": "Countdown set starttime"
 			},
 			{
 				"command": "working-hours.setend",
-				"title": "Countdown Ende setzen"
+				"title": "Countdown set endtime"
 			},
 			{
 				"command": "working-hours.resume",
-				"title": "Countdown fortsetzten"
+				"title": "Countdown resume"
 			},
 			{
 				"command": "working-hours.pause",
-				"title": "Countdown pausieren"
+				"title": "Countdown pause"
 			},
 			{
 				"command": "working-hours.clear",
-				"title": "Countdown stoppen und löschen"
+				"title": "Countdown clear"
 			}
 		],
 		"configuration": [{

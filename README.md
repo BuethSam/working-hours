@@ -27,7 +27,7 @@ Users appreciate release notes as you update your extension.
 
 ### 1.0.1
 
-Prompt text is now in english
+Prompt text and commands are now in english
 
 ### 1.0.0
 
