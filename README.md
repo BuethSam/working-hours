@@ -1,12 +1,13 @@
 # working-hours README
 
-This extension displays a countdown till the end of your workday.
+This extension displays a countdown, till the end of your workday, in the statusbar.
 
 ## Features
 
 Set the starttime of your day.
 Set the endtime of your day.
 
+Hover over the statusbar element to display the start and endtime.
 
 ## Extension Settings
 
