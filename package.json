@@ -2,7 +2,7 @@
 	"name": "working-hours",
 	"displayName": "Working hours",
 	"description": "",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"repository": "https://bitbucket.org/SamBueth/working-hours",
 	"engines": {
 		"vscode": "^1.30.0"
@@ -50,7 +50,7 @@
 				},
 				"working-hours.breakTime": {
 					"type": "number",
-					"default": 0.5
+					"default": 30
 				}
 			}
 		}]

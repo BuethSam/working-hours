@@ -23,6 +23,7 @@ class SettingsClass {
 
 	public set ende(v: TimeSpan | undefined) {
 		this.context.globalState.update("ende", v);
+		this.pende = v;
 	}
 
 	public get start(): TimeSpan | undefined {
@@ -31,7 +32,7 @@ class SettingsClass {
 	}
 
 	public get arbeitszeit(): TimeSpan {
-		return TimeSpan.fromHours(this.workTime + this.breakTime);
+		return TimeSpan.fromMinutes(this.workTime * 60 + this.breakTime);
 	}
 
 	private get config(): vscode.WorkspaceConfiguration {
