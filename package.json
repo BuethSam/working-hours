@@ -1,9 +1,9 @@
 {
-	"name": "timeout",
-	"displayName": "Timeout",
+	"name": "working-hours",
+	"displayName": "Working hours",
 	"description": "",
 	"version": "0.0.6",
-	"repository": "https://bitbucket.org/SamBueth/timeout",
+	"repository": "https://bitbucket.org/SamBueth/working-hours",
 	"engines": {
 		"vscode": "^1.30.0"
 	},
@@ -17,38 +17,38 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [{
-				"command": "timeout.setstart",
-				"title": "Timeout Anfang setzen"
+				"command": "working-hours.setstart",
+				"title": "Countdown Anfang setzen"
 			},
 			{
-				"command": "timeout.setend",
-				"title": "Timeout Ende setzen"
+				"command": "working-hours.setend",
+				"title": "Countdown Ende setzen"
 			},
 			{
-				"command": "timeout.resume",
-				"title": "Timeout fortsetzten"
+				"command": "working-hours.resume",
+				"title": "Countdown fortsetzten"
 			},
 			{
-				"command": "timeout.pause",
-				"title": "Timeout pausieren"
+				"command": "working-hours.pause",
+				"title": "Countdown pausieren"
 			},
 			{
-				"command": "timeout.clear",
-				"title": "Timeout stoppen und löschen"
+				"command": "working-hours.clear",
+				"title": "Countdown stoppen und löschen"
 			}
 		],
 		"configuration": [{
-			"title": "Worktimeout",
+			"title": "Working hours",
 			"properties": {
-				"timeout.autostart": {
+				"working-hours.autostart": {
 					"type": "boolean",
 					"default": true
 				},
-				"timeout.workTime": {
+				"working-hours.workTime": {
 					"type": "number",
 					"default": 7.6
 				},
-				"timeout.breakTime": {
+				"working-hours.breakTime": {
 					"type": "number",
 					"default": 0.5
 				}

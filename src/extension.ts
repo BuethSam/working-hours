@@ -35,7 +35,7 @@ class SettingsClass {
 	}
 
 	private get config(): vscode.WorkspaceConfiguration {
-		return vscode.workspace.getConfiguration("timeout");
+		return vscode.workspace.getConfiguration("working-hours");
 	}
 
 	public get autostart(): boolean {
@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 	Settings = new SettingsClass(context);
 
 	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	myStatusBarItem.command = 'timeout.pause';
+	myStatusBarItem.command = 'working-hours.pause';
 
 	context.subscriptions.push(myStatusBarItem);
 
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
 		startTimeout();
 	}
 
-	let dissetstart = vscode.commands.registerCommand('timeout.setstart', () => {
+	let dissetstart = vscode.commands.registerCommand('working-hours.setstart', () => {
 		stopInterval();
 		vscode.window.showInputBox({ prompt: "Geben sie die Startzeit ein. ", placeHolder: new Date().toLocaleTimeString() }).then((value) => {
 			if (value === '') Settings.ende = Settings.arbeitszeit.add(DateTime.now.timeOfDay);
@@ -78,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
-	let dissetend = vscode.commands.registerCommand('timeout.setend', () => {
+	let dissetend = vscode.commands.registerCommand('working-hours.setend', () => {
 		stopInterval();
 		vscode.window.showInputBox({ prompt: "Geben Sie die Endzeit ein. " }).then((value) => {
 			if (value !== '') {
@@ -91,19 +91,19 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
-	let disresume = vscode.commands.registerCommand('timeout.resume', () => {
+	let disresume = vscode.commands.registerCommand('working-hours.resume', () => {
 		if (Settings.ende) {
 			startTimeout();
 		}
-		else vscode.window.showWarningMessage("Timer nicht gesetzt! ");
+		else vscode.window.showWarningMessage("Countdown nicht gesetzt! ");
 	});
 
-	let dispause = vscode.commands.registerCommand('timeout.pause', () => {
+	let dispause = vscode.commands.registerCommand('working-hours.pause', () => {
 		stopInterval();
 		myStatusBarItem.hide();
 	});
 
-	let disclear = vscode.commands.registerCommand('timeout.clear', () => {
+	let disclear = vscode.commands.registerCommand('working-hours.clear', () => {
 		stopInterval();
 		myStatusBarItem.hide();
 		Settings.ende = undefined;
