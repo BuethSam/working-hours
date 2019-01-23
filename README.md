@@ -9,6 +9,10 @@ Set the endtime of your day.
 
 Hover over the statusbar element to display the start and endtime.
 
+## Demo
+
+![demo](demo.gif)
+
 ## Extension Settings
 
 This extension contributes the following settings:
@@ -24,6 +28,10 @@ None.
 ## Release Notes
 
 Users appreciate release notes as you update your extension.
+
+### 1.0.2
+
+Demo animation in README
 
 ### 1.0.1
 
