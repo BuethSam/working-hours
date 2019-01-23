@@ -1,7 +1,14 @@
 # Change Log
-All notable changes to the "timeout" extension will be documented in this file.
+All notable changes to the "working hours" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### 1.0.2
 
-## [Unreleased]
-- Initial release
+Demo animation in README
+
+### 1.0.1
+
+Prompt text and commands are now in english
+
+### 1.0.0
+
+Initial release of Working Hours
