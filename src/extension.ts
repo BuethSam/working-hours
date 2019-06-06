@@ -10,20 +10,17 @@ var Settings: SettingsClass;
 
 class SettingsClass {
 	private context: vscode.ExtensionContext;
-	private pende: TimeSpan | undefined;
 	constructor(_context: vscode.ExtensionContext) {
 		this.context = _context;
-		this.pende = this.context.globalState.get("ende");
 	}
 
 	public get ende(): TimeSpan | undefined {
-		if (!this.pende) return undefined;
-		return new TimeSpan(this.pende!.ticks, TimeUnit.Ticks);
+		const pende = this.context.globalState.get<TimeSpan>("ende");
+		return pende ? new TimeSpan(pende.ticks, TimeUnit.Ticks) : undefined;
 	}
 
 	public set ende(v: TimeSpan | undefined) {
 		this.context.globalState.update("ende", v);
-		this.pende = v;
 	}
 
 	public get start(): TimeSpan | undefined {
@@ -62,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 	Settings = new SettingsClass(context);
 
 	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-	myStatusBarItem.command = 'working-hours.pause';
+	myStatusBarItem.command = 'working-hours.hide';
 
 	context.subscriptions.push(myStatusBarItem);
 
@@ -99,7 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
 		else vscode.window.showWarningMessage("Countdown not set! ");
 	});
 
-	let dispause = vscode.commands.registerCommand('working-hours.pause', () => {
+	let dishide = vscode.commands.registerCommand('working-hours.hide', () => {
 		stopInterval();
 		myStatusBarItem.hide();
 	});
@@ -114,7 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(dissetstart);
 	context.subscriptions.push(dissetend);
 	context.subscriptions.push(disresume);
-	context.subscriptions.push(dispause);
+	context.subscriptions.push(dishide);
 	context.subscriptions.push(disclear);
 
 }
@@ -131,17 +128,23 @@ function startTimeout() {
 
 
 function updateStatusBarItem(): void {
-	var t = Settings.rest;
-	if (t.ticks <= 0) stopInterval();
-	switch (t.direction) {
-		case +1:
-			myStatusBarItem.text = "$(watch) T-" + TimeSpanToString(t);
-			myStatusBarItem.color = 'statusBar.foreground';
-			break;
-		default:
-			myStatusBarItem.text = "$(check) ENDE";
-			myStatusBarItem.color = 'lime';
-			break;
+	if (!Settings.ende) {
+		myStatusBarItem.hide();
+		stopInterval();
+	}
+	else {
+		var t = Settings.rest;
+		if (t.ticks <= 0) stopInterval();
+		switch (t.direction) {
+			case +1:
+				myStatusBarItem.text = "$(watch) T-" + TimeSpanToString(t);
+				myStatusBarItem.color = 'statusBar.foreground';
+				break;
+			default:
+				myStatusBarItem.text = "$(check) ENDE";
+				myStatusBarItem.color = 'lime';
+				break;
+		}
 	}
 }
 

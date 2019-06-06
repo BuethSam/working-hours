@@ -2,7 +2,7 @@
 	"name": "working-hours",
 	"displayName": "Working hours",
 	"description": "",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"repository": "https://github.com/BuethSam/working-hours",
 	"engines": {
 		"vscode": "^1.30.0"
@@ -18,23 +18,23 @@
 	"contributes": {
 		"commands": [{
 				"command": "working-hours.setstart",
-				"title": "Countdown set starttime"
+				"title": "Countdown: Set StartTime"
 			},
 			{
 				"command": "working-hours.setend",
-				"title": "Countdown set endtime"
+				"title": "Countdown: Set EndTime"
 			},
 			{
 				"command": "working-hours.resume",
-				"title": "Countdown resume"
+				"title": "Countdown: Resume"
 			},
 			{
-				"command": "working-hours.pause",
-				"title": "Countdown pause"
+				"command": "working-hours.hide",
+				"title": "Countdown: Hide"
 			},
 			{
 				"command": "working-hours.clear",
-				"title": "Countdown clear"
+				"title": "Countdown: Clear"
 			}
 		],
 		"configuration": [{
