@@ -29,6 +29,11 @@ None.
 
 Users appreciate release notes as you update your extension.
 
+### 1.1.1
+
+Command titles are now "Countdown: {command}". <br>
+Timer is automatically synced between multiple instances.
+
 ### 1.0.2
 
 Demo animation in README

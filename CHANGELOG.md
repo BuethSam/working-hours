@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "working hours" extension will be documented in this file.
 
-### 1.1.0
+### 1.1.1
 
 Command titles are now "Countdown: {command}". <br>
 Timer is automatically synced between multiple instances.
