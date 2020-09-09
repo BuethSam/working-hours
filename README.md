@@ -29,6 +29,14 @@ None.
 
 Users appreciate release notes as you update your extension.
 
+### 1.1.3
+
+Added Extension description
+
+### 1.1.2
+
+Extension is now activated globally when using remote development.
+
 ### 1.1.1
 
 Command titles are now "Countdown: {command}". <br>

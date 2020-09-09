@@ -1,8 +1,8 @@
 {
 	"name": "working-hours",
 	"displayName": "Working hours",
-	"description": "",
-	"version": "1.1.1",
+	"description": "Displays countdown till end of workday in statusbar",
+	"version": "1.1.3",
 	"repository": "https://github.com/BuethSam/working-hours",
 	"engines": {
 		"vscode": "^1.30.0"
@@ -14,49 +14,55 @@
 	"activationEvents": [
 		"*"
 	],
+	"extensionKind": [
+		"ui"
+	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
+		"commands": [
+			{
 				"command": "working-hours.setstart",
-				"title": "Countdown: Set StartTime"
+				"title": "Working hours: Set StartTime"
 			},
 			{
 				"command": "working-hours.setend",
-				"title": "Countdown: Set EndTime"
+				"title": "Working hours: Set EndTime"
 			},
 			{
 				"command": "working-hours.resume",
-				"title": "Countdown: Resume"
+				"title": "Working hours: Resume"
 			},
 			{
 				"command": "working-hours.hide",
-				"title": "Countdown: Hide"
+				"title": "Working hours: Hide"
 			},
 			{
 				"command": "working-hours.clear",
-				"title": "Countdown: Clear"
+				"title": "Working hours: Clear"
 			}
 		],
-		"configuration": [{
-			"title": "Working hours",
-			"properties": {
-				"working-hours.autostart": {
-					"type": "boolean",
-					"default": true,
-					"description": "If enabled the countdown will resume when opening a new window"
-				},
-				"working-hours.workTime": {
-					"type": "number",
-					"default": 7.6,
-					"description": "Duration of your working hours in hours (e.g. 7.6), to add to the starttime to calculate the endtime"
-				},
-				"working-hours.breakTime": {
-					"type": "number",
-					"default": 30,
-					"description": "Duration of your break in minutes, to add to the starttime to calculate the endtime"
+		"configuration": [
+			{
+				"title": "Working hours",
+				"properties": {
+					"working-hours.autostart": {
+						"type": "boolean",
+						"default": true,
+						"description": "If enabled the countdown will resume when opening a new window"
+					},
+					"working-hours.workTime": {
+						"type": "number",
+						"default": 7.6,
+						"description": "Duration of your working hours in hours (e.g. 7.6), to add to the starttime to calculate the endtime"
+					},
+					"working-hours.breakTime": {
+						"type": "number",
+						"default": 30,
+						"description": "Duration of your break in minutes, to add to the starttime to calculate the endtime"
+					}
 				}
 			}
-		}]
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
