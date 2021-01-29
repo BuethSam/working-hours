@@ -1,4 +1,6 @@
-# working-hours README
+# <img width="25px" src="images/icon.png" alt="working-hours"/> working-hours README
+
+<p align="center"><img width="150px" src="images/icon.png" alt="working-hours"/></p>
 
 This extension displays a countdown, till the end of your workday, in the statusbar.
 
@@ -27,7 +29,15 @@ None.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 1.1.4
+
+<img width="40px" src="images/icon.png" alt="working-hours"/>
+
+Added Icon
+
+### 1.1.3
+
+Added Extension description
 
 ### 1.1.3
 
