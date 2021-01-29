@@ -2,7 +2,7 @@
 	"name": "working-hours",
 	"displayName": "Working hours",
 	"description": "Displays countdown till end of workday in statusbar",
-	"version": "1.1.4",
+	"version": "1.1.5",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/BuethSam/working-hours"

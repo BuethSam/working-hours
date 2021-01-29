@@ -29,11 +29,15 @@ None.
 
 ## Release Notes
 
+### 1.1.5
+
+Reduced bundle size
+
 ### 1.1.4
 
 <img width="40px" src="images/icon.png" alt="working-hours"/>
 
-Added Icon
+Added icon
 
 ### 1.1.3
 
